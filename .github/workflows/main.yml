@@ -1,4 +1,4 @@
-name: Deploy Laravel Project via SFTP
+name: Deploy Laravel Project via SFTP (Stable)
 
 on:
   push:
@@ -7,40 +7,28 @@ on:
 
 jobs:
   deploy:
-    name: Deploy via SFTP
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout latest code
         uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20'
-
-      - name: Copy .env if not exists
-        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
-
       - name: Set directory permissions
         run: chmod -R 775 storage bootstrap/cache
 
-      - name: Build front-end assets
-        run: |
-          npm install
-          npm run build
-
-      - name: 📂 Sync files via SFTP
+      - name: 📂 Sync Laravel files via SFTP
         uses: SamKirkland/FTP-Deploy-Action@4.3.0
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          port: ${{ secrets.FTP_PORT }}   # biasanya 21 untuk FTP, 22 untuk SFTP
-          local-dir: ./                   # folder root project di repo
-          server-dir: /public_html/       # target folder di hosting
+          port: ${{ secrets.FTP_PORT }}   # 22 untuk SFTP
+          local-dir: ./                   # root repo
+          server-dir: /public_html/       # target folder
           exclude: |
             **/.git*
             **/tests/**
             **/.env
             **/node_modules/
+            **/.github/
+            **/vendor/node_modules/
