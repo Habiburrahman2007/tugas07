@@ -44,7 +44,7 @@ jobs:
             **/.env
 
       - name: Run server-side commands via SSH
-        uses: appleboy/ssh-action@0.1.6
+        uses: appleboy/ssh-action@v0.1
         with:
           host: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
