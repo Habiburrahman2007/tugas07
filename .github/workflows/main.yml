@@ -42,19 +42,3 @@ jobs:
             **/.git*
             **/tests/**
             **/.env
-
-      - name: Run server-side commands via SSH
-        uses: appleboy/ssh-action@v0.1
-        with:
-          host: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          key: ${{ secrets.SSH_KEY }}   # generate SSH key di cPanel & simpan di GitHub Secrets
-          port: 22
-          script: |
-            cd /home/username/public_html
-            composer install --no-dev --optimize-autoloader
-            php artisan migrate --force
-            php artisan cache:clear
-            php artisan config:clear
-            php artisan route:clear
-            php artisan view:clear
