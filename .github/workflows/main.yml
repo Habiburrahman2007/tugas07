@@ -1,4 +1,4 @@
-name: Deploy Laravel Project on push to cPanel
+name: Deploy Laravel Project via SFTP
 
 on:
   push:
@@ -6,8 +6,8 @@ on:
       - main
 
 jobs:
-  web-deploy:
-    name: Deploy
+  deploy:
+    name: Deploy via SFTP
     runs-on: ubuntu-latest
 
     steps:
@@ -36,9 +36,11 @@ jobs:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          server-dir: /public_html/
-          local-dir: ./    # pastikan ini folder root project
+          port: ${{ secrets.FTP_PORT }}   # biasanya 21 untuk FTP, 22 untuk SFTP
+          local-dir: ./                   # folder root project di repo
+          server-dir: /public_html/       # target folder di hosting
           exclude: |
             **/.git*
             **/tests/**
             **/.env
+            **/node_modules/
